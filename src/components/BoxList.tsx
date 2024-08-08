@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Box from './Box';
 import NewBoxForm from './NewBoxForm';
 
-function BoxList() {
-  const [boxes, setBoxes] = useState([]);
+interface BoxType {
+  id: number;
+  width: string;
+  height: string;
+  backgroundColor: string;
+}
 
-  const addBox = (newBox) => {
-    setBoxes([...boxes, newBox]);
+function BoxList() {
+  const [boxes, setBoxes] = useState<BoxType[]>([]);
+
+  const addBox = (newBox: Omit<BoxType, 'id'>) => {
+    setBoxes([...boxes, { ...newBox, id: boxes.length }]);
   };
 
-  const removeBox = (id) => {
+  const removeBox = (id: number) => {
     setBoxes(boxes.filter(box => box.id !== id));
   };
 
@@ -17,10 +24,10 @@ function BoxList() {
     <div>
       <NewBoxForm addBox={addBox} />
       <div>
-        {boxes.map((box, index) => (
+        {boxes.map((box) => (
           <Box
-            key={index}
-            id={index}
+            key={box.id}
+            id={box.id}
             width={box.width}
             height={box.height}
             backgroundColor={box.backgroundColor}
